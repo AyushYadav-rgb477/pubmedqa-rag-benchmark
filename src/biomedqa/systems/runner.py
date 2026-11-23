@@ -88,6 +88,7 @@ def run_llm_split(
         "prompt_template_sha256": v1.template_hash(),
         "model_identity": client.identity,
         "generation": client.generation.to_dict(),
+        "effective_generation": getattr(inner, "effective_generation", None),
         "device_map": str(getattr(inner, "device_map", None)),
         "cache_hits": getattr(client, "hits", None),
         "cache_misses": getattr(client, "misses", None),

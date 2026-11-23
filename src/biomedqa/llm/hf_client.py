@@ -58,6 +58,14 @@ class HFClient:
         )
         self.model.eval()
         self.device_map = getattr(self.model, "hf_device_map", device_map)
+        # Replace the model's own generation config. Passing a config to generate() is not
+        # enough: transformers 4.5x copies the model's defaults (Qwen: do_sample=True,
+        # temperature=0.7, repetition_penalty=1.05) over every value of the passed config that
+        # equals the library default -- which includes do_sample=False and
+        # repetition_penalty=1.0. With the model's config replaced there is nothing to copy.
+        self._hf_gen = self._build_hf_generation_config()
+        self.model.generation_config = self._hf_gen
+        self._check_greedy()
 
     @property
     def identity(self) -> dict[str, Any]:
@@ -67,8 +75,15 @@ class HFClient:
     def generation(self) -> GenerationConfig:
         return self._generation
 
-    def _hf_generation_config(self):
-        """A fresh config so none of the model's sampling defaults leak in (ADR 0005)."""
+    @property
+    def effective_generation(self) -> dict[str, Any]:
+        """The decoding settings the model will actually use (recorded in run files)."""
+        gc = self.model.generation_config
+        keys = ("do_sample", "num_beams", "repetition_penalty", "max_new_tokens",
+                "temperature", "top_p", "top_k", "eos_token_id", "pad_token_id")  # fmt: skip
+        return {k: getattr(gc, k, None) for k in keys}
+
+    def _build_hf_generation_config(self):
         from transformers import GenerationConfig as HFGenerationConfig
 
         base = self.model.generation_config
@@ -84,6 +99,19 @@ class HFClient:
             bos_token_id=base.bos_token_id,
         )
 
+    def _hf_generation_config(self):
+        return self._hf_gen
+
+    def _check_greedy(self) -> None:
+        gc = self.model.generation_config
+        g = self._generation
+        if (gc.do_sample, gc.num_beams, gc.repetition_penalty) != (
+            g.do_sample,
+            g.num_beams,
+            g.repetition_penalty,
+        ):
+            raise RuntimeError(f"decoding is not the configured greedy setting: {gc}")
+
     def generate(self, messages: Sequence[Message]) -> Generation:
         import torch
 
@@ -94,11 +122,12 @@ class HFClient:
             input_ids = input_ids["input_ids"]
         input_ids = input_ids.to(self.model.device)
         attention_mask = torch.ones_like(input_ids)
+        self._check_greedy()
         with torch.no_grad():
             out = self.model.generate(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
-                generation_config=self._hf_generation_config(),
+                generation_config=self._hf_gen,
             )
         new = out[0, input_ids.shape[1] :].tolist()
         eos = self.model.generation_config.eos_token_id
