@@ -6,7 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versio
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-23
+
+Phase 1: data, scorer, classifier baseline.
+
 ### Added
+- 5-seed PubMedBERT dev results in `results/classifier/` (Colab T4).
 - Phase 1 protocol (splits, scoring, classifier) and ADRs 0002-0004, registered before any run.
 - PubMedQA `pqa_labeled` loader pinned to a dataset revision.
 - Splits: official 500 test PMIDs, stratified train 400 / dev 100 (seed 42), SHA-256 checksums;
