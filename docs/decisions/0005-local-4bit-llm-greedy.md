@@ -23,6 +23,15 @@ would cost money and could change behind the same name.
 - Keep the model's default generation config: sampling makes runs non-reproducible, and its
   repetition penalty silently changes "greedy".
 
+## Implementation note (2026-11-23)
+
+Passing a greedy `GenerationConfig` to `generate()` is not enough on transformers 4.51.3: it
+copies the model's own defaults over every passed value that equals the library default, so
+Qwen's `do_sample=True`, `temperature=0.7` and `repetition_penalty=1.05` came back. Caught by the
+smoke tests on the Colab stack before any real run. The client now replaces the model's
+`generation_config` itself, checks the greedy settings before every call, and records the
+effective settings in each run file.
+
 ## Consequences
 
 Results are reproducible up to GPU numerical noise. 4-bit weights cost some accuracy compared

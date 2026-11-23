@@ -18,6 +18,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versio
 - Majority-class baseline and its dev results (`results/baselines/majority/`).
 - Colab notebook `notebooks/02_llm_colab.ipynb`.
 
+### Fixed
+- Greedy decoding on transformers 4.51.3: the model's sampling defaults were merged back into
+  the passed generation config. The client now replaces the model's generation config and
+  checks it before every call (found by the Colab test run, before any LLM result).
+
 ## [0.1.0] - 2026-11-23
 
 Phase 1: data, scorer, classifier baseline.

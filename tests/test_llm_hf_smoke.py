@@ -80,6 +80,26 @@ def test_hf_client_overrides_sampling_defaults(tiny_qwen: Path) -> None:
     assert hf.max_new_tokens == 6
 
 
+def test_model_generation_config_is_replaced(tiny_qwen: Path) -> None:
+    """Regression (Colab, transformers 4.51.3): passing a greedy config to generate() was not
+    enough; the model's own sampling defaults were merged back in. The model's config itself
+    must hold the greedy settings."""
+    client = _client(tiny_qwen)
+    gc = client.model.generation_config
+    assert gc.do_sample is False
+    assert gc.repetition_penalty == 1.0
+    assert gc.temperature != 0.7
+    eff = client.effective_generation
+    assert (eff["do_sample"], eff["num_beams"], eff["repetition_penalty"]) == (False, 1, 1.0)
+
+
+def test_check_greedy_refuses_tampered_config(tiny_qwen: Path) -> None:
+    client = _client(tiny_qwen)
+    client.model.generation_config.do_sample = True
+    with pytest.raises(RuntimeError, match="greedy"):
+        client.generate(MESSAGES)
+
+
 def test_hf_client_generation_is_deterministic(tiny_qwen: Path) -> None:
     client = _client(tiny_qwen)
     a = client.generate(MESSAGES)
