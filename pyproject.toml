@@ -22,6 +22,7 @@ dev = [
     "ruff>=0.8",
     "pytest>=8.0",
     "pre-commit>=3.7",
+    "scikit-learn>=1.4",  # only used in tests, to cross-check our own metric code
 ]
 # Fine-tuning PubMedBERT (Colab GPU). Versions match the known-good Colab stack.
 classifier = [
@@ -59,6 +60,10 @@ extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# long shell (!) commands in Colab notebooks cannot be wrapped safely
+"*.ipynb" = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["biomedqa"]

@@ -1,0 +1,14 @@
+# PubMedQA questions and splits. See docs/experiment-protocol.md section 1.
+dataset:
+  name: qiaojin/PubMedQA
+  config: pqa_labeled
+  revision: 9001f2853fb87cab8d220904e0de81ac6973b318
+
+splits:
+  file: splits/pqa_labeled_splits.json
+  official_test_pmids: splits/official_test_pmids.txt
+  official_test_source: "github.com/pubmedqa/pubmedqa@1cbae8e92f72f20c8d3747cbb3bf5bc53554d997:data/test_ground_truth.json (keys only)"
+  seed: 42
+  n_test: 500
+  n_train: 400
+  n_dev: 100
