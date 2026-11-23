@@ -24,7 +24,7 @@ this table and the files disagree. No number here is typed by hand.
 <!-- results:start -->
 | System | Split | Accuracy (%) | Macro-F1 (%) | Runs | Parse failures | Source |
 |---|---|---|---|---|---|---|
-| Majority class (train) | dev | pending | pending | pending | pending | [`results/baselines/majority/dev_metrics.json`](results/baselines/majority/dev_metrics.json) |
+| Majority class (train) | dev | 55.0 [45.0, 65.0] | 23.7 [20.7, 26.3] | 1 run | 0 | [`results/baselines/majority/dev_metrics.json`](results/baselines/majority/dev_metrics.json) |
 | PubMedBERT classifier | dev | 57.6 ± 5.1 | 41.0 ± 6.7 | 5 seeds | 0 | [`results/classifier/summary.json`](results/classifier/summary.json) |
 | Closed-book LLM | dev | pending | pending | pending | pending | [`results/llm/closed_book/dev_metrics.json`](results/llm/closed_book/dev_metrics.json) |
 | Oracle LLM (gold abstract) | dev | pending | pending | pending | pending | [`results/llm/oracle/dev_metrics.json`](results/llm/oracle/dev_metrics.json) |
