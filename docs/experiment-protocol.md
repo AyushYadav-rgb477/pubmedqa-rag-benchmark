@@ -13,15 +13,61 @@ Changes after a run must be added as a dated amendment with the reason, never si
 
 ## 1. Data and splits
 
-_To be written in Phase 1 before splits are created._
+_Registered 2026-11-23, before any split was created._
+
+- **Questions:** Hugging Face `qiaojin/PubMedQA`, config `pqa_labeled` (1000 expert-labelled
+  questions), revision `9001f2853fb87cab8d220904e0de81ac6973b318`. Gold label = `final_decision`.
+- **Test (500):** the official PubMedQA test PMIDs, i.e. the keys of `data/test_ground_truth.json`
+  in `github.com/pubmedqa/pubmedqa` at commit `1cbae8e92f72f20c8d3747cbb3bf5bc53554d997`
+  (downloaded file SHA-256 `939fe566f09017d13b1ca64d2ddfee0bc2374b366048152997669cccedc44d51`).
+  Only the keys were kept (`splits/official_test_pmids.txt`); the labels in that file were
+  discarded without being read.
+- **Train (400) / dev (100):** the remaining 500 questions, stratified by gold label, seed 42.
+  Algorithm (in `biomedqa.data.splits`): dev size per class by largest-remainder proportional
+  allocation of 100; within each class (order yes, no, maybe) the PMIDs are sorted numerically and
+  permuted with `numpy.random.default_rng(42)`; the first n go to dev, the rest to train.
+- **Integrity:** `splits/pqa_labeled_splits.json` stores sorted IDs per split and SHA-256 of
+  `"\n".join(sorted_ids) + "\n"`. Re-creating the splits raises if the result differs.
+- **Test-set lock:** code refuses to load or score test IDs unless `allow_test=True` /
+  `--allow-test` is passed. This flag is used only in Phase 4.
 
 ## 2. Scoring
 
-_To be written in Phase 1 before any system is scored._
+_Registered 2026-11-23, before any system was scored._
+
+- **Labels:** {yes, no, maybe}. Any output that cannot be mapped to one of them gets the
+  prediction `invalid` and parse status `failed`.
+- **Parse failures count as wrong; they are never dropped.** Accuracy: `invalid` is wrong.
+  Macro-F1 is the unweighted mean of F1 over the three real labels with `zero_division=0`;
+  an `invalid` prediction is a false negative for the gold class and a false positive for no class.
+  The confusion matrix has gold rows (yes, no, maybe) and predicted columns
+  (yes, no, maybe, invalid). The parse-failure count is reported separately.
+- **Primary metric:** macro-F1 (the classes are imbalanced, `maybe` is rare).
+  **Secondary:** accuracy, per-class precision / recall / F1.
+- **Uncertainty:** percentile bootstrap 95% CI, 10,000 resamples of questions with replacement,
+  `numpy.random.default_rng(42)`, for accuracy and macro-F1.
 
 ## 3. Classifier baseline (PubMedBERT)
 
-_To be written in Phase 1 before training._
+_Registered 2026-11-23, before any training run._
+
+- **Model:** `microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext`, revision
+  `e1354b7a3a09615f6aba48dfad4b7a613eef7062`, sequence-classification head with 3 labels
+  (yes=0, no=1, maybe=2).
+- **Input:** pair (question, context), context = the abstract's context paragraphs joined by a
+  space, in dataset order. `long_answer` (the article's conclusion) is **never** used: it nearly
+  states the answer. Max length 512, truncation `only_second` (the context is truncated, never the
+  question).
+- **Training:** AdamW, learning rate 2e-5, weight decay 0.01, linear schedule with 10% warmup,
+  effective batch size 16 (per-device 8 x gradient accumulation 2), 10 epochs, fp16 on GPU,
+  gradient clipping at 1.0, no class weighting. Train on the 400 train questions only.
+- **Seeds:** 0, 1, 2, 3, 4 (each controls head init, data order and dropout).
+- **Model selection:** after every epoch, score dev; keep the epoch with the highest dev macro-F1,
+  ties to the earlier epoch. That checkpoint is saved (Google Drive, not git) for Phase 4.
+- **Reported:** per seed, dev metrics of the selected epoch with bootstrap CI; across seeds,
+  mean and sample standard deviation (ddof=1) of dev accuracy and macro-F1.
+- **Known bias:** dev is used both to pick the epoch and to report the score, so dev numbers
+  are optimistic. The clean estimate is the locked test set in Phase 4.
 
 ## 4. LLM systems: closed-book and oracle
 
