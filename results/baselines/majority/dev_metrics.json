@@ -1,0 +1,81 @@
+{
+  "system": "majority",
+  "config_hash": "a0e6636b256c53fc24ee1230bae69b33755864614924f548df4d0c534a4bc606",
+  "split": "dev",
+  "n": 100,
+  "accuracy": 0.55,
+  "macro_f1": 0.23655913978494625,
+  "per_class": {
+    "yes": {
+      "precision": 0.55,
+      "recall": 1.0,
+      "f1": 0.7096774193548387,
+      "support": 55,
+      "predicted": 100
+    },
+    "no": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 34,
+      "predicted": 0
+    },
+    "maybe": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 11,
+      "predicted": 0
+    }
+  },
+  "confusion": {
+    "rows_gold": [
+      "yes",
+      "no",
+      "maybe"
+    ],
+    "cols_pred": [
+      "yes",
+      "no",
+      "maybe",
+      "invalid"
+    ],
+    "matrix": [
+      [
+        55,
+        0,
+        0,
+        0
+      ],
+      [
+        34,
+        0,
+        0,
+        0
+      ],
+      [
+        11,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "n_parse_failures": 0,
+  "bootstrap": {
+    "method": "percentile bootstrap over questions",
+    "n_resamples": 10000,
+    "seed": 42,
+    "confidence": 0.95,
+    "accuracy": {
+      "low": 0.45,
+      "high": 0.65
+    },
+    "macro_f1": {
+      "low": 0.20689655172413793,
+      "high": 0.2626262626262626
+    }
+  },
+  "predictions_file": "dev_predictions.jsonl",
+  "predictions_sha256": "5681d4e5165561bc33085bd099773e230703737c7f5094036c5e9fcde158faf5"
+}

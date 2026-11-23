@@ -28,7 +28,12 @@ class Row:
 
 
 # Order of rows in the README. Later phases append closed-book, oracle and RAG rows.
-ROWS: tuple[Row, ...] = (Row("PubMedBERT classifier", "dev", "results/classifier/summary.json"),)
+ROWS: tuple[Row, ...] = (
+    Row("Majority class (train)", "dev", "results/baselines/majority/dev_metrics.json"),
+    Row("PubMedBERT classifier", "dev", "results/classifier/summary.json"),
+    Row("Closed-book LLM", "dev", "results/llm/closed_book/dev_metrics.json"),
+    Row("Oracle LLM (gold abstract)", "dev", "results/llm/oracle/dev_metrics.json"),
+)
 
 
 def _fmt(x: float) -> str:
