@@ -60,6 +60,9 @@ GPU steps run on Google Colab (T4) with the notebooks in `notebooks/`:
 | Phase | Notebook | Writes |
 |---|---|---|
 | 1 | [`01_classifier_colab.ipynb`](notebooks/01_classifier_colab.ipynb) | `results/classifier/` |
+| 2 | [`02_llm_colab.ipynb`](notebooks/02_llm_colab.ipynb) | `results/llm/` |
+
+The majority baseline runs on CPU: `python scripts/run_majority.py --split dev`.
 
 Score any prediction file: `python scripts/score.py <predictions.jsonl> --split dev`.
 Rebuild the table: `python scripts/update_readme_results.py`.

@@ -6,6 +6,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versio
 
 ## [Unreleased]
 
+### Added
+- Phase 2 protocol (section 4: model, decoding, prompt v1, parser, cache, majority baseline) and
+  ADRs 0005-0007, registered before any LLM run.
+- LLM client interface, fake client, 4-bit NF4 Hugging Face client with pure greedy decoding,
+  `device_map` from config.
+- Content-addressed on-disk response cache with atomic writes.
+- Frozen prompt v1 and a robust JSON parser (regex fallback on the answer field only;
+  fabricated citation counting).
+- Closed-book and oracle systems, shared runner, LLM statistics, `scripts/run_llm.py`.
+- Majority-class baseline and its dev results (`results/baselines/majority/`).
+- Colab notebook `notebooks/02_llm_colab.ipynb`.
+
 ## [0.1.0] - 2026-11-23
 
 Phase 1: data, scorer, classifier baseline.
