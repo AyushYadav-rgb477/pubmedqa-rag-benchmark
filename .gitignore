@@ -22,8 +22,8 @@ htmlcov/
 .claude/settings.local.json
 
 # Data, corpora, caches (never committed)
-data/
-cache/
+/data/
+/cache/
 *.parquet
 *.arrow
 
