@@ -1,0 +1,82 @@
+{
+  "system": "pubmedbert",
+  "config_hash": "d52c4d0f9f38862ba6a24ba7c96f27c2089901b7fbcb3f0d2643bea1d8ee042f",
+  "split": "dev",
+  "n": 100,
+  "accuracy": 0.65,
+  "macro_f1": 0.5010585744530699,
+  "per_class": {
+    "yes": {
+      "precision": 0.7407407407407407,
+      "recall": 0.7272727272727273,
+      "f1": 0.7339449541284404,
+      "support": 55,
+      "predicted": 54
+    },
+    "no": {
+      "precision": 0.5454545454545454,
+      "recall": 0.7058823529411765,
+      "f1": 0.6153846153846154,
+      "support": 34,
+      "predicted": 44
+    },
+    "maybe": {
+      "precision": 0.5,
+      "recall": 0.09090909090909091,
+      "f1": 0.15384615384615385,
+      "support": 11,
+      "predicted": 2
+    }
+  },
+  "confusion": {
+    "rows_gold": [
+      "yes",
+      "no",
+      "maybe"
+    ],
+    "cols_pred": [
+      "yes",
+      "no",
+      "maybe",
+      "invalid"
+    ],
+    "matrix": [
+      [
+        40,
+        14,
+        1,
+        0
+      ],
+      [
+        10,
+        24,
+        0,
+        0
+      ],
+      [
+        4,
+        6,
+        1,
+        0
+      ]
+    ]
+  },
+  "n_parse_failures": 0,
+  "bootstrap": {
+    "method": "percentile bootstrap over questions",
+    "n_resamples": 10000,
+    "seed": 42,
+    "confidence": 0.95,
+    "accuracy": {
+      "low": 0.55,
+      "high": 0.74
+    },
+    "macro_f1": {
+      "low": 0.4003519911588279,
+      "high": 0.6151241048465274
+    }
+  },
+  "predictions_file": "dev_predictions.jsonl",
+  "predictions_sha256": "f14bc670960e12f35014e78094cf7c3662434b6b9a81f72d4cde6431f43a146a",
+  "best_epoch": 8
+}
