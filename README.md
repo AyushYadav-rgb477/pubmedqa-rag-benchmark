@@ -24,7 +24,7 @@ this table and the files disagree. No number here is typed by hand.
 <!-- results:start -->
 | System | Split | Accuracy (%) | Macro-F1 (%) | Runs | Parse failures | Source |
 |---|---|---|---|---|---|---|
-| PubMedBERT classifier | dev | pending | pending | pending | pending | [`results/classifier/summary.json`](results/classifier/summary.json) |
+| PubMedBERT classifier | dev | 57.6 ± 5.1 | 41.0 ± 6.7 | 5 seeds | 0 | [`results/classifier/summary.json`](results/classifier/summary.json) |
 
 Multi-seed rows: mean ± sample std over seeds. Single runs: value [95% bootstrap CI]. Dev selects settings, so dev numbers are optimistic; test is locked until Phase 4.
 <!-- results:end -->

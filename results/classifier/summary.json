@@ -1,0 +1,58 @@
+{
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "n_seeds": 5,
+  "per_seed": {
+    "0": {
+      "accuracy": 0.65,
+      "macro_f1": 0.5010585744530699,
+      "best_epoch": 8,
+      "n_parse_failures": 0
+    },
+    "1": {
+      "accuracy": 0.6,
+      "macro_f1": 0.46141414141414144,
+      "best_epoch": 10,
+      "n_parse_failures": 0
+    },
+    "2": {
+      "accuracy": 0.57,
+      "macro_f1": 0.35728763589460105,
+      "best_epoch": 6,
+      "n_parse_failures": 0
+    },
+    "3": {
+      "accuracy": 0.52,
+      "macro_f1": 0.3550446998722861,
+      "best_epoch": 6,
+      "n_parse_failures": 0
+    },
+    "4": {
+      "accuracy": 0.54,
+      "macro_f1": 0.3731563421828909,
+      "best_epoch": 7,
+      "n_parse_failures": 0
+    }
+  },
+  "accuracy": {
+    "mean": 0.576,
+    "std": 0.051283525619832335,
+    "min": 0.52,
+    "max": 0.65
+  },
+  "macro_f1": {
+    "mean": 0.40959227876339793,
+    "std": 0.06725024200476198,
+    "min": 0.3550446998722861,
+    "max": 0.5010585744530699
+  },
+  "system": "pubmedbert",
+  "split": "dev",
+  "config_hash_without_seed": "05cfefe9954c2d50963658a240599b57f8dab0fc4e80ac419e60079636ade9b3",
+  "note": "Dev selects the epoch and is also reported: optimistic (protocol section 3)."
+}

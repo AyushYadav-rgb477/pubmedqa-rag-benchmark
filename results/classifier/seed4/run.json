@@ -1,0 +1,133 @@
+{
+  "system": "pubmedbert",
+  "seed": 4,
+  "config": {
+    "system": "pubmedbert",
+    "data_config": "configs/data.yaml",
+    "model": {
+      "name": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+      "revision": "e1354b7a3a09615f6aba48dfad4b7a613eef7062"
+    },
+    "input": {
+      "max_length": 512,
+      "truncation": "only_second",
+      "use_long_answer": false
+    },
+    "train": {
+      "learning_rate": 2e-05,
+      "weight_decay": 0.01,
+      "warmup_ratio": 0.1,
+      "per_device_batch_size": 8,
+      "grad_accum_steps": 2,
+      "epochs": 10,
+      "max_grad_norm": 1.0,
+      "fp16": true,
+      "eval_batch_size": 32
+    },
+    "selection": {
+      "split": "dev",
+      "metric": "macro_f1",
+      "ties": "earlier_epoch"
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "config_hash": "6bd7e8cdc2ccb6091e7e0163d726e8ab9fcdc66c5f5dede36c7e4162cd736c83",
+  "dataset_revision": "9001f2853fb87cab8d220904e0de81ac6973b318",
+  "best_epoch": 7,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.0262774658203124,
+      "dev_accuracy": 0.55,
+      "macro_f1": 0.23655913978494625,
+      "elapsed_s": 9.9
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.8994012451171876,
+      "dev_accuracy": 0.54,
+      "macro_f1": 0.290326006159074,
+      "elapsed_s": 19.8
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.7938742065429687,
+      "dev_accuracy": 0.56,
+      "macro_f1": 0.3103960921737284,
+      "elapsed_s": 29.7
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.6451751708984375,
+      "dev_accuracy": 0.45,
+      "macro_f1": 0.3056978730010868,
+      "elapsed_s": 39.5
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4749314880371094,
+      "dev_accuracy": 0.52,
+      "macro_f1": 0.33376024590163933,
+      "elapsed_s": 49.2
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.34965621948242187,
+      "dev_accuracy": 0.51,
+      "macro_f1": 0.35183486238532113,
+      "elapsed_s": 58.9
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.2807080841064453,
+      "dev_accuracy": 0.54,
+      "macro_f1": 0.3731563421828909,
+      "elapsed_s": 68.8
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.23217525482177734,
+      "dev_accuracy": 0.51,
+      "macro_f1": 0.3037365889752128,
+      "elapsed_s": 78.6
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.21852760314941405,
+      "dev_accuracy": 0.55,
+      "macro_f1": 0.37231873419786315,
+      "elapsed_s": 88.1
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.19358108520507813,
+      "dev_accuracy": 0.52,
+      "macro_f1": 0.3623931623931624,
+      "elapsed_s": 97.7
+    }
+  ],
+  "train_seconds": 99.9,
+  "device": "cuda",
+  "checkpoint_saved": true,
+  "versions": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "packages": {
+      "biomedqa": "0.0.1",
+      "numpy": "2.4.6",
+      "torch": "2.6.0",
+      "transformers": "4.51.3",
+      "accelerate": "1.6.0",
+      "datasets": "4.8.5",
+      "scikit-learn": "1.6.1"
+    },
+    "cuda": "12.4",
+    "gpu": "Tesla T4"
+  }
+}

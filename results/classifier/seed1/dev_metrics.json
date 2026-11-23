@@ -1,0 +1,82 @@
+{
+  "system": "pubmedbert",
+  "config_hash": "4cd8ae913977245cefaee55681cfeec44d39c3434148d775c93f6f0c38f331e8",
+  "split": "dev",
+  "n": 100,
+  "accuracy": 0.6,
+  "macro_f1": 0.46141414141414144,
+  "per_class": {
+    "yes": {
+      "precision": 0.6909090909090909,
+      "recall": 0.6909090909090909,
+      "f1": 0.6909090909090909,
+      "support": 55,
+      "predicted": 55
+    },
+    "no": {
+      "precision": 0.5121951219512195,
+      "recall": 0.6176470588235294,
+      "f1": 0.56,
+      "support": 34,
+      "predicted": 41
+    },
+    "maybe": {
+      "precision": 0.25,
+      "recall": 0.09090909090909091,
+      "f1": 0.13333333333333333,
+      "support": 11,
+      "predicted": 4
+    }
+  },
+  "confusion": {
+    "rows_gold": [
+      "yes",
+      "no",
+      "maybe"
+    ],
+    "cols_pred": [
+      "yes",
+      "no",
+      "maybe",
+      "invalid"
+    ],
+    "matrix": [
+      [
+        38,
+        15,
+        2,
+        0
+      ],
+      [
+        12,
+        21,
+        1,
+        0
+      ],
+      [
+        5,
+        5,
+        1,
+        0
+      ]
+    ]
+  },
+  "n_parse_failures": 0,
+  "bootstrap": {
+    "method": "percentile bootstrap over questions",
+    "n_resamples": 10000,
+    "seed": 42,
+    "confidence": 0.95,
+    "accuracy": {
+      "low": 0.5,
+      "high": 0.7
+    },
+    "macro_f1": {
+      "low": 0.3652776924651924,
+      "high": 0.5701631253767329
+    }
+  },
+  "predictions_file": "dev_predictions.jsonl",
+  "predictions_sha256": "104155c1876f9f8264353232b8851511c90578ce69ef0a6dbe66322a7aabf932",
+  "best_epoch": 10
+}
