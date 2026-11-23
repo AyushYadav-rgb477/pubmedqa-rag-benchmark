@@ -6,7 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versio
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-23
+
+Phase 2: LLM layer, closed-book and oracle.
+
 ### Added
+- Closed-book and oracle dev results in `results/llm/` (Colab T4, Qwen2.5-7B-Instruct 4-bit).
 - Phase 2 protocol (section 4: model, decoding, prompt v1, parser, cache, majority baseline) and
   ADRs 0005-0007, registered before any LLM run.
 - LLM client interface, fake client, 4-bit NF4 Hugging Face client with pure greedy decoding,
