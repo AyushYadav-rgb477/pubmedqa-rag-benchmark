@@ -1,0 +1,30 @@
+# PubMedBERT classifier baseline. Pre-registered in docs/experiment-protocol.md section 3.
+system: pubmedbert
+data_config: configs/data.yaml
+
+model:
+  name: microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext
+  revision: e1354b7a3a09615f6aba48dfad4b7a613eef7062
+
+input:
+  max_length: 512
+  truncation: only_second   # truncate the context, never the question
+  use_long_answer: false    # the conclusion is never given to the model
+
+train:
+  learning_rate: 2.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  per_device_batch_size: 8
+  grad_accum_steps: 2       # effective batch size 16
+  epochs: 10
+  max_grad_norm: 1.0
+  fp16: true
+  eval_batch_size: 32
+
+selection:
+  split: dev
+  metric: macro_f1
+  ties: earlier_epoch
+
+seeds: [0, 1, 2, 3, 4]
