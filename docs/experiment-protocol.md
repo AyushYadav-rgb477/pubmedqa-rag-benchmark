@@ -69,9 +69,85 @@ _Registered 2026-11-23, before any training run._
 - **Known bias:** dev is used both to pick the epoch and to report the score, so dev numbers
   are optimistic. The clean estimate is the locked test set in Phase 4.
 
-## 4. LLM systems: closed-book and oracle
+## 4. LLM systems: closed-book, oracle and majority baseline
 
-_To be written in Phase 2 before the dev runs._
+_Registered 2026-11-23, before any LLM run._
+
+### 4.1 Model and decoding
+
+- **Model:** `Qwen/Qwen2.5-7B-Instruct`, revision `a09a35458c702b33eeacc393d103063234e8bc28`.
+- **Quantization:** bitsandbytes 4-bit NF4, compute dtype float16 (the T4 has no bfloat16),
+  no double quantization; `device_map = {"": 0}` (whole model on the GPU).
+- **Decoding:** greedy. The model's own `generation_config.json` (sampling with temperature 0.7,
+  top-p 0.8, top-k 20, repetition penalty 1.05) is overridden: `do_sample=False`, `num_beams=1`,
+  `repetition_penalty=1.0`, `max_new_tokens=512`. One question per forward pass (batch size 1,
+  no padding effects).
+- **Chat format:** the tokenizer's chat template with a system message and
+  `add_generation_prompt=True`.
+
+### 4.2 Prompt v1 (frozen)
+
+The exact text lives in `src/biomedqa/prompts/v1.py`; a test checks it equals the text below.
+Any change makes a new prompt version (v2, ...) recorded as an amendment, never an edit of v1.
+
+System message:
+
+```text
+You are a biomedical research assistant. You answer research questions about PubMed studies with yes, no, or maybe.
+```
+
+User message (the `Documents` block is present only when documents are given):
+
+```text
+Answer the research question with yes, no, or maybe.
+
+Documents:
+[1] <document text>
+[2] <document text>
+
+Question: <question>
+
+Respond with only a JSON object with these keys:
+"answer": "yes", "no", or "maybe"
+"rationale": one or two sentences explaining the answer
+"citations": a list of the document numbers that support the answer, for example [1]; use [] if no documents are given or none support the answer
+```
+
+- **Closed-book:** no `Documents` block.
+- **Oracle:** one document, `[1]` = the question's own abstract context (paragraphs joined by a
+  space, conclusion / `long_answer` excluded), the same text the classifier sees.
+- Phase 3 RAG uses the same prompt with k retrieved documents.
+
+### 4.3 Parsing (decided before seeing any model output)
+
+1. Strip Markdown code fences; take the first balanced `{...}` object in the output; `json.loads`.
+2. `answer`: lowercase, strip spaces and trailing punctuation; must be yes / no / maybe.
+3. **Regex fallback:** if step 1 fails, read only an `"answer": "<value>"` field with a regex.
+   Recorded as `parse_method = regex_fallback` and counted in every report. A yes / no / maybe
+   anywhere else in free text is **never** taken as the answer.
+4. Otherwise the prediction is `invalid` (counts as wrong, section 2).
+5. `citations`: accepted as integers or strings such as `"2"` or `"[4]"`. A citation outside
+   1..n_documents is **fabricated** (in closed-book every citation is fabricated). Unreadable
+   citation entries are counted separately. Citations never change the answer or the score.
+
+### 4.4 Reported per LLM run
+
+All section 2 metrics, plus: parse failures, regex-fallback count, outputs that hit the
+512-token limit, share of answers with at least one citation, number of fabricated citations
+and of questions with at least one fabricated citation.
+
+### 4.5 Response cache
+
+Responses are cached on disk keyed by SHA-256 over: model name, revision, quantization settings,
+generation settings, prompt version and the full chat messages. Writes are atomic. The cache
+only avoids recomputation; with greedy decoding a cached and a fresh response are meant to be
+identical. Library versions are recorded in every run file.
+
+### 4.6 Majority-class baseline
+
+Predicts, for every question, the most frequent gold label in the **train** split (ties to the
+earlier label in yes, no, maybe order). Scored on dev like every other system; a floor for
+interpreting the other numbers. No GPU.
 
 ## 5. Retrieval and RAG
 
