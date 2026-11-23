@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Claude Code local settings (never committed)
+.claude/settings.local.json
+
+# Data, corpora, caches (never committed)
+data/
+cache/
+*.parquet
+*.arrow
+
+# Models / weights / indexes (large files)
+models/
+checkpoints/
+*.faiss
+*.index
+*.bin
+*.pt
+*.safetensors
+*.ckpt
+chroma_db/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
