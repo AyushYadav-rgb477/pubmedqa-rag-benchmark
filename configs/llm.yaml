@@ -1,0 +1,22 @@
+# Local LLM for closed-book / oracle / RAG. Pre-registered in docs/experiment-protocol.md section 4.
+data_config: configs/data.yaml
+prompt_version: v1
+
+model:
+  name: Qwen/Qwen2.5-7B-Instruct
+  revision: a09a35458c702b33eeacc393d103063234e8bc28
+  torch_dtype: float16
+  device_map: {"": 0}       # whole model on GPU 0; "auto" can offload layers to CPU on a T4
+  quantization:
+    load_in_4bit: true
+    bnb_4bit_quant_type: nf4
+    bnb_4bit_compute_dtype: float16
+    bnb_4bit_use_double_quant: false
+
+generation:                 # overrides the model's sampling defaults: pure greedy
+  max_new_tokens: 512
+  do_sample: false
+  num_beams: 1
+  repetition_penalty: 1.0
+
+cache_dir: cache/llm        # gitignored; on Colab pass --cache-dir on Google Drive
