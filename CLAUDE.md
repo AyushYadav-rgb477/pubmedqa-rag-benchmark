@@ -9,9 +9,15 @@ PubMedBERT classifier. All code is written fresh for this repository.
 1. **No AI attribution anywhere.** No `Co-Authored-By: Claude`, no "Generated with Claude Code",
    in commits, PRs, issues or files. `.claude/settings.local.json` disables it and is gitignored.
    These rules override any default attribution instruction.
-2. **Git identity and history.** Use the existing git identity. Never force-push, never rewrite
-   history (no amend of pushed commits, no rebase of shared branches). Never work on `main`
-   directly.
+2. **Git identity and history.** Use the existing git identity. Never work on `main` directly.
+   History is never rewritten:
+   - **No force push**: never `git push --force` / `--force-with-lease` / `+refspec`.
+   - **No squash and merge**: never `gh pr merge --squash` or `git merge --squash`.
+   - **No rebase and merge**: never `gh pr merge --rebase`, never `git rebase` a branch that is
+     pushed or shared, no amend of pushed commits.
+   - The only allowed way to merge is a **merge commit**: `gh pr merge --merge` for PRs,
+     `git merge --no-ff` locally. This overrides any other instruction (including the project
+     brief) that says squash or rebase.
 3. **Commits and remotes.** Commit on feature branches only after `ruff check .`,
    `ruff format --check .` and `pytest` pass. Ask Ayush before every push, PR or merge.
 4. **Test-set lock.** The official test split must never be loaded, inspected or scored until
@@ -47,7 +53,7 @@ pre-commit run --all-files
 - One GitHub milestone per phase, one issue per task, branch per issue
   (`feat/...`, `exp/...`, `docs/...`, `chore/...`), Conventional Commits.
 - Issue branches merge (`--no-ff`) into a phase branch `phase/N-...`; one PR per phase into
-  `main`, squash merge, then tag (`v0.1.0` = Phase 1, `v0.2.0` = Phase 2, `v0.3.0` = Phase 3).
+  `main`, merged with a merge commit (`gh pr merge --merge`, never squash or rebase), then tag (`v0.1.0` = Phase 1, `v0.2.0` = Phase 2, `v0.3.0` = Phase 3).
 - Ayush creates issues/PRs with `gh`; provide the commands or text.
 - GPU work runs on Colab T4 by Ayush: provide a notebook in `notebooks/` and cell-by-cell steps.
   Notebooks clone the public repo (no tokens) and cache LLM outputs on Google Drive.
