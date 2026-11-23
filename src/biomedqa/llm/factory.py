@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 from biomedqa.llm.client import GenerationConfig, LLMClient
@@ -17,6 +18,18 @@ def device_map_from_config(model_cfg: Mapping[str, Any]) -> Any:
     """
     dm = model_cfg.get("device_map")
     return DEFAULT_DEVICE_MAP if dm in (None, {}, "") else dm
+
+
+def make_cached_client(
+    cfg: Mapping[str, Any], cache_dir: str | Path | None = None, client_cls: Any = None
+):
+    """The configured client wrapped in the on-disk response cache."""
+    from biomedqa.llm.cache import CachedClient, ResponseCache
+
+    root = cache_dir if cache_dir is not None else cfg["cache_dir"]
+    return CachedClient(
+        make_client(cfg, client_cls), ResponseCache(root), prompt_version=cfg["prompt_version"]
+    )
 
 
 def make_client(cfg: Mapping[str, Any], client_cls: Any = None) -> LLMClient:
